@@ -78,6 +78,7 @@ export default function AgentPage() {
   const [showSecurity, setShowSecurity] = useState(true);
   const [showStatusBar, setShowStatusBar] = useState(true);
   const [showHeaderProject, setShowHeaderProject] = useState(true);
+  const [zenMode, setZenMode] = useState(false);
   const [consoleCollapsed, setConsoleCollapsed] = useState(false);
 
   const handleSidebarClick = (tab: string) => {
