@@ -459,6 +459,10 @@ export default function AgentPage() {
             <Cpu className="w-3 h-3 text-zinc-700" />
             <span className="text-[9px] font-medium text-zinc-600">Region: us-east-1</span>
           </div>
+          <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+            <Scale className="w-2.5 h-2.5 text-emerald-500" />
+            <span className="text-[8px] font-bold text-emerald-500 uppercase tracking-widest">MCP Active</span>
+          </div>
         </div>
         <div className="flex items-center gap-4">
            <div className="flex items-center gap-1.5">
