@@ -84,15 +84,6 @@ export default function AgentPage() {
     { title: "Performance MCP", description: "Optimized Model Context Protocol for low-latency, context-aware reasoning.", icon: <Cpu className="w-3 h-3" /> },
   ];
 
-  const handleSidebarClick = (id: string) => {
-    if (activeSidebar === id && !sidebarCollapsed && autoHideSidebar) {
-      setSidebarCollapsed(true);
-    } else {
-      setActiveSidebar(id);
-      setSidebarCollapsed(false);
-    }
-  };
-
   const handleSend = () => {
     if (!input.trim()) return;
     
@@ -263,7 +254,7 @@ export default function AgentPage() {
         {/* Leftmost Icon Bar */}
         <aside className="w-11 border-r border-zinc-900 bg-[#050505] flex flex-col items-center py-4 gap-4 z-30">
           <div 
-            onClick={() => setActiveSidebar("chat")}
+            onClick={() => handleSidebarClick("chat")}
             className={cn(
               "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
               activeSidebar === "chat" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
@@ -272,7 +263,7 @@ export default function AgentPage() {
             <MessageSquare className="w-4 h-4" />
           </div>
           <div 
-            onClick={() => setActiveSidebar("files")}
+            onClick={() => handleSidebarClick("files")}
             className={cn(
               "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
               activeSidebar === "files" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
@@ -282,7 +273,7 @@ export default function AgentPage() {
           </div>
           {showEthics && (
             <div 
-              onClick={() => setActiveSidebar("ethics")}
+              onClick={() => handleSidebarClick("ethics")}
               className={cn(
                 "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
                 activeSidebar === "ethics" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
