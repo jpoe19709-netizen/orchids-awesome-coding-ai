@@ -130,15 +130,11 @@ export default function AgentPage() {
             </div>
             <span className="font-semibold text-white tracking-tight text-xs">Orchids</span>
           </div>
-          {showHeaderProject && !zenMode && (
-            <>
-              <div className="h-4 w-[1px] bg-zinc-800" />
-              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md hover:bg-zinc-900 transition-colors cursor-pointer group">
-                <span className="text-[11px] font-medium text-zinc-500 group-hover:text-zinc-300">Project / My App</span>
-                <ChevronDown className="w-2.5 h-2.5 text-zinc-700" />
-              </div>
-            </>
-          )}
+          <div className="h-4 w-[1px] bg-zinc-800" />
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md hover:bg-zinc-900 transition-colors cursor-pointer group">
+            <span className="text-[11px] font-medium text-zinc-500 group-hover:text-zinc-300">Project / My App</span>
+            <ChevronDown className="w-2.5 h-2.5 text-zinc-700" />
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -376,33 +372,38 @@ export default function AgentPage() {
           >
             <MessageSquare className="w-4 h-4" />
           </div>
-          <div 
-            onClick={() => handleSidebarClick("files")}
-            className={cn(
-              "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
-              activeSidebar === "files" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
-            )}
-          >
-            <FolderTree className="w-4 h-4" />
-          </div>
-          {showEthics && (
             <div 
-              onClick={() => handleSidebarClick("ethics")}
+              onClick={() => handleSidebarClick("files")}
               className={cn(
                 "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
-                activeSidebar === "ethics" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
+                activeSidebar === "files" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
               )}
             >
-              <Scale className="w-4 h-4" />
+              <FolderTree className="w-4 h-4" />
             </div>
-          )}
-          <div className="w-7 h-7 rounded-md flex items-center justify-center text-zinc-600 cursor-pointer hover:bg-zinc-900 hover:text-zinc-400 transition-colors">
-            <Database className="w-4 h-4" />
-          </div>
-          <div className="w-7 h-7 rounded-md flex items-center justify-center text-zinc-600 cursor-pointer hover:bg-zinc-900 hover:text-zinc-400 transition-colors">
-            <Shield className="w-4 h-4" />
-          </div>
-          <div className="mt-auto mb-2">
+            {showEthics && !zenMode && (
+              <div 
+                onClick={() => handleSidebarClick("ethics")}
+                className={cn(
+                  "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
+                  activeSidebar === "ethics" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
+                )}
+              >
+                <Scale className="w-4 h-4" />
+              </div>
+            )}
+            {showDatabase && !zenMode && (
+              <div className="w-7 h-7 rounded-md flex items-center justify-center text-zinc-600 cursor-pointer hover:bg-zinc-900 hover:text-zinc-400 transition-colors">
+                <Database className="w-4 h-4" />
+              </div>
+            )}
+            {showSecurity && !zenMode && (
+              <div className="w-7 h-7 rounded-md flex items-center justify-center text-zinc-600 cursor-pointer hover:bg-zinc-900 hover:text-zinc-400 transition-colors">
+                <Shield className="w-4 h-4" />
+              </div>
+            )}
+            <div className="mt-auto mb-2">
+
             <div className="w-7 h-7 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 cursor-pointer hover:text-white transition-colors">
               <User className="w-3.5 h-3.5" />
             </div>
