@@ -84,6 +84,15 @@ export default function AgentPage() {
     { title: "Performance MCP", description: "Optimized Model Context Protocol for low-latency, context-aware reasoning.", icon: <Cpu className="w-3 h-3" /> },
   ];
 
+  const handleSidebarClick = (id: string) => {
+    if (activeSidebar === id && !sidebarCollapsed && autoHideSidebar) {
+      setSidebarCollapsed(true);
+    } else {
+      setActiveSidebar(id);
+      setSidebarCollapsed(false);
+    }
+  };
+
   const handleSend = () => {
     if (!input.trim()) return;
     
