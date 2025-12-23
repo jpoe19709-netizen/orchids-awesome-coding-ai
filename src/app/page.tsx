@@ -189,10 +189,19 @@ export default function AwesomeCodingAI() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <Button variant="outline" className="h-12 border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 rounded-xl px-6">
-              <Github className="w-4 h-4 mr-2" />
-              Star on GitHub
-            </Button>
+            <div className="flex gap-4">
+              <Button 
+                onClick={() => window.location.href = '/agent'}
+                className="h-12 bg-white text-black hover:bg-zinc-200 rounded-xl px-6 font-bold shadow-lg shadow-white/5"
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                Try Dyad Agent
+              </Button>
+              <Button variant="outline" className="h-12 border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 rounded-xl px-6">
+                <Github className="w-4 h-4 mr-2" />
+                Star on GitHub
+              </Button>
+            </div>
           </motion.div>
         </header>
 
