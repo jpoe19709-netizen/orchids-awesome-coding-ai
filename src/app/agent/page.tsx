@@ -130,11 +130,15 @@ export default function AgentPage() {
             </div>
             <span className="font-semibold text-white tracking-tight text-xs">Orchids</span>
           </div>
-          <div className="h-4 w-[1px] bg-zinc-800" />
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md hover:bg-zinc-900 transition-colors cursor-pointer group">
-            <span className="text-[11px] font-medium text-zinc-500 group-hover:text-zinc-300">Project / My App</span>
-            <ChevronDown className="w-2.5 h-2.5 text-zinc-700" />
-          </div>
+          {showHeaderProject && !zenMode && (
+            <>
+              <div className="h-4 w-[1px] bg-zinc-800" />
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md hover:bg-zinc-900 transition-colors cursor-pointer group">
+                <span className="text-[11px] font-medium text-zinc-500 group-hover:text-zinc-300">Project / My App</span>
+                <ChevronDown className="w-2.5 h-2.5 text-zinc-700" />
+              </div>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-3">
