@@ -68,7 +68,16 @@ export default function AgentPage() {
   const [input, setInput] = useState("");
   const [isBuilding, setIsBuilding] = useState(false);
   const [activeTab, setActiveTab] = useState("preview");
+  const [activeSidebar, setActiveSidebar] = useState("chat");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  const ETHICS_RULES = [
+    { title: "Concise Communication", description: "Minimal text, high density information. Avoid preambles and summaries.", icon: <Zap className="w-3 h-3" /> },
+    { title: "Technical Precision", description: "Code is primary. Explanations are secondary and only when requested.", icon: <Code2 className="w-3 h-3" /> },
+    { title: "Zero Hallucination", description: "If unknown, use Web_Search. Never guess API signatures or library versions.", icon: <Search className="w-3 h-3" /> },
+    { title: "Security First", description: "Proactive vulnerability scanning. No plain-text secrets or insecure patterns.", icon: <ShieldCheck className="w-3 h-3" /> },
+    { title: "Performance MCP", description: "Optimized Model Context Protocol for low-latency, context-aware reasoning.", icon: <Cpu className="w-3 h-3" /> },
+  ];
 
   const handleSend = () => {
     if (!input.trim()) return;
