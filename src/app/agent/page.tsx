@@ -22,7 +22,18 @@ import {
   ShieldCheck,
   Zap,
   Box,
-  Layers
+  Layers,
+  FolderTree,
+  MessageSquare,
+  Cpu,
+  Monitor,
+  Database,
+  Shield,
+  Activity,
+  Github,
+  Maximize2,
+  ExternalLink,
+  ChevronDown
 } from "lucide-react";
 import { 
   ResizableHandle, 
@@ -34,11 +45,12 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 const INITIAL_MESSAGES = [
   {
     role: "assistant",
-    content: "I'm Dyad. What are we building today?",
+    content: "Ready to build. What are we working on?",
   }
 ];
 
@@ -54,6 +66,7 @@ export default function AgentPage() {
   const [input, setInput] = useState("");
   const [isBuilding, setIsBuilding] = useState(false);
   const [activeTab, setActiveTab] = useState("preview");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -66,7 +79,7 @@ export default function AgentPage() {
     setTimeout(() => {
       setMessages(prev => [...prev, { 
         role: "assistant", 
-        content: `Analyzing "${input}"... I'll start by scaffolding the core components.`,
+        content: `Analyzing your request. I'll scaffold the components and set up the routes for you.`,
         isGenerating: true 
       }]);
       
@@ -74,281 +87,332 @@ export default function AgentPage() {
         setIsBuilding(false);
         setMessages(prev => {
           const last = prev[prev.length - 1];
-          return [...prev.slice(0, -1), { ...last, isGenerating: false, content: "Update complete. The changes are now live in the preview." }];
+          return [...prev.slice(0, -1), { ...last, isGenerating: false, content: "Deployment successful. You can now view the changes in the preview panel." }];
         });
       }, 2000);
     }, 600);
   };
 
   return (
-    <div className="h-screen bg-black text-zinc-400 overflow-hidden flex flex-col font-sans antialiased selection:bg-white/10 selection:text-white">
-      {/* Sleek Header */}
-      <header className="h-12 border-b border-zinc-900 flex items-center justify-between px-4 bg-black z-20">
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
-              <Box className="w-4 h-4 text-black" />
+    <div className="h-screen bg-[#050505] text-zinc-400 overflow-hidden flex flex-col font-sans antialiased selection:bg-zinc-800">
+      {/* Top Navigation Bar */}
+      <header className="h-11 border-b border-zinc-900 flex items-center justify-between px-3 bg-[#050505] z-30">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 bg-white rounded flex items-center justify-center">
+              <Box className="w-3.5 h-3.5 text-black" />
             </div>
-            <span className="font-semibold text-white tracking-tight text-sm">Dyad</span>
+            <span className="font-semibold text-white tracking-tight text-xs">Orchids</span>
           </div>
-          <div className="flex items-center gap-2 px-2 py-0.5 rounded border border-zinc-800 bg-zinc-900/30">
-            <Rocket className="w-3 h-3 text-zinc-500" />
-            <span className="text-[11px] font-medium text-zinc-500">v0.1.0</span>
-            <ChevronRight className="w-2.5 h-2.5 text-zinc-700" />
-            <span className="text-[11px] font-medium text-zinc-300">Main</span>
+          <div className="h-4 w-[1px] bg-zinc-800" />
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md hover:bg-zinc-900 transition-colors cursor-pointer group">
+            <span className="text-[11px] font-medium text-zinc-500 group-hover:text-zinc-300">Project / My App</span>
+            <ChevronDown className="w-2.5 h-2.5 text-zinc-700" />
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-widest text-zinc-600">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            Connected
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-2 py-1 rounded bg-zinc-900/50 border border-zinc-800/50">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+            <span className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider">Live</span>
           </div>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-white hover:bg-zinc-900">
-              <History className="w-3.5 h-3.5" />
+            <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-600 hover:text-white hover:bg-zinc-900">
+              <Github className="w-3.5 h-3.5" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-white hover:bg-zinc-900">
+            <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-600 hover:text-white hover:bg-zinc-900">
               <Settings className="w-3.5 h-3.5" />
             </Button>
           </div>
-          <Button className="bg-white text-black hover:bg-zinc-200 h-7 px-3 rounded text-[11px] font-bold transition-all">
-            Publish
+          <Button className="bg-white text-black hover:bg-zinc-200 h-7 px-3 rounded-md text-[11px] font-bold transition-all shadow-sm">
+            Deploy
           </Button>
         </div>
       </header>
 
-      {/* Main Layout */}
-      <main className="flex-1 overflow-hidden relative">
-        <ResizablePanelGroup direction="horizontal">
-          {/* Left Sidebar */}
-          <ResizablePanel defaultSize={18} minSize={15} maxSize={25} className="border-r border-zinc-900 bg-black">
-            <div className="flex flex-col h-full">
-              <div className="p-3">
-                <div className="relative group">
-                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-zinc-600 group-focus-within:text-zinc-400 transition-colors" />
-                  <Input 
-                    placeholder="Find files..." 
-                    className="h-7 pl-8 bg-zinc-900/20 border-zinc-900 text-[11px] placeholder:text-zinc-700 focus:border-zinc-700 transition-all rounded-sm"
-                  />
-                </div>
-              </div>
-              
-              <div className="flex-1 overflow-auto">
-                <div className="px-2 py-1">
-                  <div className="flex items-center justify-between px-2 py-1 mb-1">
-                    <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Explorer</span>
+      {/* Main content area */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Leftmost Icon Bar */}
+        <aside className="w-11 border-r border-zinc-900 bg-[#050505] flex flex-col items-center py-4 gap-4 z-30">
+          <div className="w-7 h-7 rounded-md bg-zinc-900 flex items-center justify-center text-white cursor-pointer hover:bg-zinc-800 transition-colors">
+            <MessageSquare className="w-4 h-4" />
+          </div>
+          <div className="w-7 h-7 rounded-md flex items-center justify-center text-zinc-600 cursor-pointer hover:bg-zinc-900 hover:text-zinc-400 transition-colors">
+            <FolderTree className="w-4 h-4" />
+          </div>
+          <div className="w-7 h-7 rounded-md flex items-center justify-center text-zinc-600 cursor-pointer hover:bg-zinc-900 hover:text-zinc-400 transition-colors">
+            <Database className="w-4 h-4" />
+          </div>
+          <div className="w-7 h-7 rounded-md flex items-center justify-center text-zinc-600 cursor-pointer hover:bg-zinc-900 hover:text-zinc-400 transition-colors">
+            <Shield className="w-4 h-4" />
+          </div>
+          <div className="mt-auto mb-2">
+            <div className="w-7 h-7 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 cursor-pointer hover:text-white transition-colors">
+              <User className="w-3.5 h-3.5" />
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Resizable Panes */}
+        <main className="flex-1 overflow-hidden relative">
+          <ResizablePanelGroup direction="horizontal">
+            {/* Explorer Panel */}
+            {!sidebarCollapsed && (
+              <ResizablePanel defaultSize={15} minSize={12} maxSize={20} className="border-r border-zinc-900 bg-[#050505]">
+                <div className="flex flex-col h-full">
+                  <div className="h-9 px-3 flex items-center justify-between border-b border-zinc-900/50">
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.1em]">Files</span>
                     <Plus className="w-3 h-3 text-zinc-600 hover:text-zinc-400 cursor-pointer" />
                   </div>
-                  <div className="space-y-0.5">
-                    {MOCK_FILES.map(file => (
-                      <div 
-                        key={file.name} 
-                        className="flex items-center gap-2.5 px-2 py-1.5 rounded-sm hover:bg-zinc-900/50 cursor-pointer group transition-colors"
-                      >
-                        {file.icon}
-                        <span className="text-[12px] text-zinc-500 group-hover:text-zinc-300 truncate">{file.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="px-2 py-4">
-                  <div className="flex items-center gap-2 px-2 py-1 mb-1">
-                    <Layers className="w-3 h-3 text-zinc-600" />
-                    <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Components</span>
-                  </div>
-                  <div className="px-2 py-1 text-[11px] text-zinc-700 italic">No custom components yet</div>
-                </div>
-              </div>
-
-              <div className="p-3 border-t border-zinc-900">
-                <div className="flex items-center gap-2.5 px-2 py-2 rounded-md hover:bg-zinc-900/30 transition-colors cursor-pointer">
-                  <div className="w-5 h-5 rounded bg-zinc-800 flex items-center justify-center">
-                    <User className="w-3 h-3 text-zinc-400" />
-                  </div>
-                  <span className="text-[11px] font-medium text-zinc-500">Workspace</span>
-                </div>
-              </div>
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle className="w-[1px] bg-zinc-900 hover:bg-zinc-700 transition-colors" />
-
-          {/* Center: Chat Area */}
-          <ResizablePanel defaultSize={42}>
-            <div className="flex flex-col h-full bg-[#050505]">
-              <ScrollArea className="flex-1">
-                <div className="max-w-2xl mx-auto px-6 py-10 space-y-8">
-                  <AnimatePresence>
-                    {messages.map((msg, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className={`flex gap-4 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                      >
-                        {msg.role === "assistant" && (
-                          <div className="w-6 h-6 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <Bot className="w-3.5 h-3.5 text-zinc-400" />
-                          </div>
-                        )}
-                        <div className={`flex flex-col max-w-[85%] ${msg.role === "user" ? "items-end" : ""}`}>
-                          <div className={`text-[13px] leading-relaxed ${
-                            msg.role === "assistant" 
-                            ? "text-zinc-300" 
-                            : "bg-zinc-900 text-white px-3 py-2 rounded-lg border border-zinc-800"
-                          }`}>
-                            {msg.content}
-                            {msg.isGenerating && (
-                              <div className="flex gap-1.5 mt-3">
-                                <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5 }} className="w-1 h-1 rounded-full bg-zinc-500" />
-                                <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.2 }} className="w-1 h-1 rounded-full bg-zinc-500" />
-                                <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.4 }} className="w-1 h-1 rounded-full bg-zinc-500" />
-                              </div>
-                            )}
-                          </div>
+                  <div className="flex-1 overflow-auto p-2">
+                    <div className="space-y-0.5">
+                      {MOCK_FILES.map(file => (
+                        <div 
+                          key={file.name} 
+                          className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-zinc-900 group cursor-pointer transition-colors"
+                        >
+                          {file.icon}
+                          <span className="text-[12px] text-zinc-500 group-hover:text-zinc-300 truncate font-medium">{file.name}</span>
                         </div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-                </div>
-              </ScrollArea>
-
-              <div className="p-4 border-t border-zinc-900/50 bg-[#050505]">
-                <div className="max-w-2xl mx-auto relative group">
-                  <div className="relative bg-zinc-900/40 border border-zinc-900 rounded-lg p-2 focus-within:border-zinc-800 transition-all">
-                    <textarea
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSend();
-                        }
-                      }}
-                      placeholder="Ask Dyad to build something..."
-                      className="w-full bg-transparent border-none focus:ring-0 text-[13px] text-zinc-200 placeholder:text-zinc-700 resize-none px-2 py-1 min-h-[40px] max-h-[200px]"
-                    />
-                    <div className="flex items-center justify-between mt-1 px-1">
-                      <div className="flex items-center gap-0.5">
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-600 hover:text-white hover:bg-zinc-800">
-                          <Plus className="w-3.5 h-3.5" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-600 hover:text-white hover:bg-zinc-800">
-                          <Command className="w-3.5 h-3.5" />
-                        </Button>
-                      </div>
-                      <Button 
-                        onClick={handleSend}
-                        disabled={!input.trim() || isBuilding}
-                        className="h-7 w-7 rounded bg-white text-black hover:bg-zinc-200 p-0 flex items-center justify-center disabled:opacity-20 disabled:hover:bg-white"
-                      >
-                        <Send className="w-3 h-3" />
-                      </Button>
+                      ))}
                     </div>
                   </div>
-                  <div className="flex justify-center mt-3">
-                    <p className="text-[10px] text-zinc-700 flex items-center gap-1.5 uppercase tracking-tighter font-medium">
-                      <ShieldCheck className="w-3 h-3" /> Secure development environment
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle className="w-[1px] bg-zinc-900 hover:bg-zinc-700 transition-colors" />
-
-          {/* Right Panel: Preview & Terminal */}
-          <ResizablePanel defaultSize={40}>
-            <ResizablePanelGroup direction="vertical">
-              {/* Preview */}
-              <ResizablePanel defaultSize={65} className="bg-black flex flex-col">
-                <div className="h-9 border-b border-zinc-900 flex items-center justify-between px-3">
-                  <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
-                    <TabsList className="h-full bg-transparent border-none gap-4">
-                      <TabsTrigger value="preview" className="h-full rounded-none border-b border-transparent data-[state=active]:border-white data-[state=active]:bg-transparent text-[10px] font-bold uppercase tracking-wider text-zinc-600 data-[state=active]:text-white transition-none">
-                        Preview
-                      </TabsTrigger>
-                      <TabsTrigger value="code" className="h-full rounded-none border-b border-transparent data-[state=active]:border-white data-[state=active]:bg-transparent text-[10px] font-bold uppercase tracking-wider text-zinc-600 data-[state=active]:text-white transition-none">
-                        Editor
-                      </TabsTrigger>
-                    </TabsList>
-                  </Tabs>
-                  <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="icon" className="h-6 w-6 text-zinc-600 hover:text-white">
-                      <Globe className="w-3 h-3" />
-                    </Button>
-                    <div className="w-[1px] h-3 bg-zinc-800 mx-1" />
-                    <Button variant="ghost" size="icon" className="h-6 w-6 text-zinc-600 hover:text-white">
-                      <Play className="w-3 h-3" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="flex-1 bg-[#0a0a0a] relative flex items-center justify-center overflow-hidden">
-                  {activeTab === "preview" ? (
-                    <div className="text-center group">
-                      <div className="w-10 h-10 border border-zinc-800 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:border-zinc-700 transition-colors">
-                        <Play className="w-4 h-4 text-zinc-700 group-hover:text-zinc-500 fill-zinc-900" />
-                      </div>
-                      <p className="text-zinc-700 text-[11px] font-medium uppercase tracking-widest">Awaiting project build</p>
-                    </div>
-                  ) : (
-                    <div className="w-full h-full p-4 font-mono text-[12px] leading-relaxed overflow-auto selection:bg-white/5">
-                      <pre className="text-zinc-500">
-                        <code>{`import React from 'react';
-
-export default function App() {
-  return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <h1 className="text-2xl font-bold">Hello World</h1>
-    </div>
-  );
-}`}</code>
-                      </pre>
-                    </div>
-                  )}
                 </div>
               </ResizablePanel>
+            )}
 
-              <ResizableHandle className="h-[1px] bg-zinc-900 hover:bg-zinc-700 transition-colors" />
+            <ResizableHandle className="w-[1px] bg-zinc-900 hover:bg-zinc-700 transition-colors" />
 
-              {/* Terminal */}
-              <ResizablePanel defaultSize={35} className="bg-black">
-                <div className="flex flex-col h-full">
-                  <div className="flex items-center gap-4 px-3 h-8 border-b border-zinc-900 bg-zinc-900/10">
-                    <div className="flex items-center gap-1.5">
-                      <Terminal className="w-3 h-3 text-zinc-600" />
-                      <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Logs</span>
+            {/* Chat Panel */}
+            <ResizablePanel defaultSize={35}>
+              <div className="flex flex-col h-full bg-[#050505]">
+                <div className="h-9 px-4 flex items-center border-b border-zinc-900/50 bg-[#080808]">
+                  <Bot className="w-3.5 h-3.5 mr-2 text-zinc-500" />
+                  <span className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider">Agent</span>
+                  <div className="ml-auto flex items-center gap-2">
+                     <span className="text-[9px] font-medium text-zinc-600 uppercase tracking-tighter bg-zinc-900 px-1.5 py-0.5 rounded">Gpt-4o</span>
+                  </div>
+                </div>
+
+                <ScrollArea className="flex-1 px-6">
+                  <div className="max-w-xl mx-auto py-8 space-y-10">
+                    {messages.map((msg, i) => (
+                      <div key={i} className="group relative">
+                        <div className="flex items-start gap-4">
+                          <div className={cn(
+                            "w-5 h-5 mt-0.5 rounded flex items-center justify-center shrink-0 border transition-all",
+                            msg.role === "assistant" 
+                              ? "bg-white border-white" 
+                              : "bg-zinc-900 border-zinc-800"
+                          )}>
+                            {msg.role === "assistant" 
+                              ? <Box className="w-3 h-3 text-black" />
+                              : <User className="w-3 h-3 text-zinc-400" />
+                            }
+                          </div>
+                          <div className="flex-1 space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+                                {msg.role === "assistant" ? "Orchids" : "You"}
+                              </span>
+                              <span className="text-[9px] text-zinc-700 font-medium">10:3{i} AM</span>
+                            </div>
+                            <div className="text-[13px] leading-relaxed text-zinc-300 antialiased">
+                              {msg.content}
+                              {msg.isGenerating && (
+                                <div className="flex gap-1.5 mt-4">
+                                  <div className="w-1 h-1 rounded-full bg-zinc-700 animate-pulse" />
+                                  <div className="w-1 h-1 rounded-full bg-zinc-700 animate-pulse delay-75" />
+                                  <div className="w-1 h-1 rounded-full bg-zinc-700 animate-pulse delay-150" />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+
+                <div className="p-4 border-t border-zinc-900/50 bg-[#050505]">
+                  <div className="max-w-xl mx-auto relative">
+                    <div className="relative bg-[#0a0a0a] border border-zinc-900 rounded-xl overflow-hidden shadow-2xl transition-all focus-within:border-zinc-700">
+                      <textarea
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSend();
+                          }
+                        }}
+                        placeholder="Ask Orchids to build..."
+                        className="w-full bg-transparent border-none focus:ring-0 text-[13px] text-zinc-200 placeholder:text-zinc-700 resize-none px-4 py-3 min-h-[50px] max-h-[200px]"
+                      />
+                      <div className="flex items-center justify-between px-3 pb-2">
+                        <div className="flex items-center gap-1">
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-zinc-600 hover:text-zinc-300">
+                            <Plus className="w-3.5 h-3.5" />
+                          </Button>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-zinc-600 hover:text-zinc-300">
+                            <Globe className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
+                        <Button 
+                          onClick={handleSend}
+                          disabled={!input.trim() || isBuilding}
+                          className="h-6 px-3 rounded bg-zinc-100 text-black hover:bg-white disabled:opacity-20 transition-all font-bold text-[10px] uppercase tracking-wider"
+                        >
+                          Send
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex-1 p-3 font-mono text-[11px] text-zinc-600 overflow-auto">
-                    <div className="flex gap-2 mb-1">
-                      <span className="text-zinc-800">dyad@workspace:</span>
-                      <span className="text-zinc-500">~/app</span>
+                </div>
+              </div>
+            </ResizablePanel>
+
+            <ResizableHandle className="w-[1px] bg-zinc-900 hover:bg-zinc-700 transition-colors" />
+
+            {/* Preview/Editor Panel */}
+            <ResizablePanel defaultSize={50}>
+              <ResizablePanelGroup direction="vertical">
+                <ResizablePanel defaultSize={70} className="bg-black flex flex-col">
+                  <div className="h-9 border-b border-zinc-900 flex items-center justify-between px-3 bg-[#080808]">
+                    <div className="flex items-center gap-1 bg-zinc-900/50 p-0.5 rounded-lg border border-zinc-800/50">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => setActiveTab("preview")}
+                        className={cn(
+                          "h-6 px-3 text-[10px] font-bold uppercase tracking-wider rounded-md transition-all",
+                          activeTab === "preview" ? "bg-zinc-800 text-white" : "text-zinc-500 hover:text-zinc-300"
+                        )}
+                      >
+                        Preview
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => setActiveTab("code")}
+                        className={cn(
+                          "h-6 px-3 text-[10px] font-bold uppercase tracking-wider rounded-md transition-all",
+                          activeTab === "code" ? "bg-zinc-800 text-white" : "text-zinc-500 hover:text-zinc-300"
+                        )}
+                      >
+                        Code
+                      </Button>
                     </div>
-                    {isBuilding && (
-                      <div className="space-y-0.5 mt-2">
-                        <div className="flex items-center gap-2">
-                          <span className="text-blue-900">info</span>
-                          <span className="text-zinc-500 italic text-[10px]">Processing request...</span>
+                    <div className="flex items-center gap-2">
+                       <div className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-900 border border-zinc-800 cursor-pointer hover:border-zinc-700 transition-colors">
+                         <span className="text-[10px] font-medium text-zinc-500">localhost:3000</span>
+                         <ExternalLink className="w-2.5 h-2.5 text-zinc-700" />
+                       </div>
+                       <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-600 hover:text-white">
+                         <Maximize2 className="w-3 h-3" />
+                       </Button>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 bg-[#0a0a0a] relative overflow-hidden flex flex-col">
+                    {activeTab === "preview" ? (
+                      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+                        <div className="relative mb-6">
+                           <div className="absolute inset-0 bg-white/5 blur-2xl rounded-full" />
+                           <div className="relative w-12 h-12 border border-zinc-800 rounded-xl flex items-center justify-center bg-[#050505]">
+                             <Monitor className="w-6 h-6 text-zinc-600" />
+                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-emerald-900">done</span>
-                          <span className="text-zinc-500 italic text-[10px]">Files synchronized.</span>
-                        </div>
+                        <h3 className="text-zinc-200 text-sm font-medium mb-1">Previewing Project</h3>
+                        <p className="text-zinc-500 text-[11px] max-w-[200px] leading-relaxed">
+                          Your changes will appear here as soon as they are compiled.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="w-full h-full p-6 font-mono text-[12px] leading-relaxed overflow-auto bg-[#050505]">
+                        <pre className="text-zinc-500 space-y-1">
+                          <code>
+                            <span className="text-zinc-700 italic">// src/app/page.tsx</span>{"\n"}
+                            <span className="text-blue-400">import</span> React <span className="text-blue-400">from</span> <span className="text-emerald-400">'react'</span>;{"\n"}
+                            {"\n"}
+                            <span className="text-blue-400">export default function</span> <span className="text-yellow-200">App</span>() {"{"}{"\n"}
+                            {"  "}<span className="text-blue-400">return</span> ({"\n"}
+                            {"    "}&lt;<span className="text-blue-300">div</span> <span className="text-zinc-300">className</span>=<span className="text-emerald-400">"min-h-screen bg-black text-white p-8"</span>&gt;{"\n"}
+                            {"      "}&lt;<span className="text-blue-300">h1</span> <span className="text-zinc-300">className</span>=<span className="text-emerald-400">"text-2xl font-bold"</span>&gt;Hello World&lt;/<span className="text-blue-300">h1</span>&gt;{"\n"}
+                            {"    "}&lt;/<span className="text-blue-300">div</span>&gt;{"\n"}
+                            {"  "});{"\n"}
+                            {"}"}
+                          </code>
+                        </pre>
                       </div>
                     )}
                   </div>
-                </div>
-              </ResizablePanel>
-            </ResizablePanelGroup>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </main>
+                </ResizablePanel>
+
+                <ResizableHandle className="h-[1px] bg-zinc-900 hover:bg-zinc-700 transition-colors" />
+
+                {/* Console Panel */}
+                <ResizablePanel defaultSize={30} className="bg-[#050505]">
+                  <div className="flex flex-col h-full">
+                    <div className="h-8 px-3 flex items-center gap-4 border-b border-zinc-900 bg-[#080808]">
+                      <div className="flex items-center gap-1.5">
+                        <Terminal className="w-3 h-3 text-zinc-600" />
+                        <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-[0.2em]">Console</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 ml-4">
+                        <Activity className="w-3 h-3 text-emerald-600" />
+                        <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Process Running</span>
+                      </div>
+                    </div>
+                    <div className="flex-1 p-3 font-mono text-[10px] text-zinc-600 overflow-auto">
+                      <div className="space-y-1">
+                        <div className="flex gap-2">
+                          <span className="text-zinc-800">orchids@cloud:</span>
+                          <span className="text-emerald-900/50 italic">~ (next dev)</span>
+                        </div>
+                        <div className="text-zinc-700">✓ Ready in 2.1s</div>
+                        <div className="text-zinc-700">○ Compiling /page...</div>
+                        {isBuilding && (
+                           <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="text-blue-900/50 italic"
+                           >
+                            &gt; Updating server components...
+                           </motion.div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </ResizablePanel>
+              </ResizablePanelGroup>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </main>
+      </div>
+
+      {/* Bottom Status Bar */}
+      <footer className="h-6 border-t border-zinc-900 bg-[#050505] flex items-center justify-between px-3 z-30">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1.5">
+            <Rocket className="w-3 h-3 text-emerald-500" />
+            <span className="text-[9px] font-medium text-zinc-500">v1.2.4-stable</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Cpu className="w-3 h-3 text-zinc-700" />
+            <span className="text-[9px] font-medium text-zinc-600">Region: us-east-1</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+           <div className="flex items-center gap-1.5">
+             <span className="text-[9px] font-medium text-zinc-600">UTF-8</span>
+           </div>
+           <div className="flex items-center gap-1.5">
+             <span className="text-[9px] font-medium text-zinc-600">TypeScript</span>
+             <ShieldCheck className="w-3 h-3 text-zinc-700" />
+           </div>
+        </div>
+      </footer>
     </div>
   );
 }
