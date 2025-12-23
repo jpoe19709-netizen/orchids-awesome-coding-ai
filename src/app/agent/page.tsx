@@ -145,11 +145,32 @@ export default function AgentPage() {
       <div className="flex-1 flex overflow-hidden">
         {/* Leftmost Icon Bar */}
         <aside className="w-11 border-r border-zinc-900 bg-[#050505] flex flex-col items-center py-4 gap-4 z-30">
-          <div className="w-7 h-7 rounded-md bg-zinc-900 flex items-center justify-center text-white cursor-pointer hover:bg-zinc-800 transition-colors">
+          <div 
+            onClick={() => setActiveSidebar("chat")}
+            className={cn(
+              "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
+              activeSidebar === "chat" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
+            )}
+          >
             <MessageSquare className="w-4 h-4" />
           </div>
-          <div className="w-7 h-7 rounded-md flex items-center justify-center text-zinc-600 cursor-pointer hover:bg-zinc-900 hover:text-zinc-400 transition-colors">
+          <div 
+            onClick={() => setActiveSidebar("files")}
+            className={cn(
+              "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
+              activeSidebar === "files" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
+            )}
+          >
             <FolderTree className="w-4 h-4" />
+          </div>
+          <div 
+            onClick={() => setActiveSidebar("ethics")}
+            className={cn(
+              "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
+              activeSidebar === "ethics" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
+            )}
+          >
+            <Scale className="w-4 h-4" />
           </div>
           <div className="w-7 h-7 rounded-md flex items-center justify-center text-zinc-600 cursor-pointer hover:bg-zinc-900 hover:text-zinc-400 transition-colors">
             <Database className="w-4 h-4" />
