@@ -250,15 +250,17 @@ export default function AgentPage() {
           >
             <FolderTree className="w-4 h-4" />
           </div>
-          <div 
-            onClick={() => setActiveSidebar("ethics")}
-            className={cn(
-              "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
-              activeSidebar === "ethics" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
-            )}
-          >
-            <Scale className="w-4 h-4" />
-          </div>
+          {showEthics && (
+            <div 
+              onClick={() => setActiveSidebar("ethics")}
+              className={cn(
+                "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
+                activeSidebar === "ethics" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
+              )}
+            >
+              <Scale className="w-4 h-4" />
+            </div>
+          )}
           <div className="w-7 h-7 rounded-md flex items-center justify-center text-zinc-600 cursor-pointer hover:bg-zinc-900 hover:text-zinc-400 transition-colors">
             <Database className="w-4 h-4" />
           </div>
