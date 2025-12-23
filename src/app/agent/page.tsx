@@ -186,11 +186,12 @@ export default function AgentPage() {
             </div>
             <div className="p-4 space-y-6">
               <div className="space-y-3">
-                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-wider">Features</span>
+                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-wider">Active Modules</span>
+                
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col">
                     <span className="text-[11px] font-medium text-zinc-300">Ethics MCP</span>
-                    <span className="text-[9px] text-zinc-600 text-pretty">Show/hide Orchids working principles in sidebar</span>
+                    <span className="text-[9px] text-zinc-600">Working principles tab</span>
                   </div>
                   <button 
                     onClick={() => setShowEthics(!showEthics)}
@@ -205,10 +206,109 @@ export default function AgentPage() {
                     )} />
                   </button>
                 </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-medium text-zinc-300">Database Tools</span>
+                    <span className="text-[9px] text-zinc-600">SQL and DB management</span>
+                  </div>
+                  <button 
+                    onClick={() => setShowDatabase(!showDatabase)}
+                    className={cn(
+                      "w-8 h-4 rounded-full transition-colors relative",
+                      showDatabase ? "bg-white" : "bg-zinc-800"
+                    )}
+                  >
+                    <div className={cn(
+                      "absolute top-0.5 w-3 h-3 rounded-full transition-all",
+                      showDatabase ? "right-0.5 bg-black" : "left-0.5 bg-zinc-500"
+                    )} />
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-medium text-zinc-300">Security Suite</span>
+                    <span className="text-[9px] text-zinc-600">Scanning and compliance</span>
+                  </div>
+                  <button 
+                    onClick={() => setShowSecurity(!showSecurity)}
+                    className={cn(
+                      "w-8 h-4 rounded-full transition-colors relative",
+                      showSecurity ? "bg-white" : "bg-zinc-800"
+                    )}
+                  >
+                    <div className={cn(
+                      "absolute top-0.5 w-3 h-3 rounded-full transition-all",
+                      showSecurity ? "right-0.5 bg-black" : "left-0.5 bg-zinc-500"
+                    )} />
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-3">
-                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-wider">Interface</span>
+                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-wider">Workspace</span>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-medium text-zinc-300">Status Bar</span>
+                    <span className="text-[9px] text-zinc-600">Bottom information bar</span>
+                  </div>
+                  <button 
+                    onClick={() => setShowStatusBar(!showStatusBar)}
+                    className={cn(
+                      "w-8 h-4 rounded-full transition-colors relative",
+                      showStatusBar ? "bg-white" : "bg-zinc-800"
+                    )}
+                  >
+                    <div className={cn(
+                      "absolute top-0.5 w-3 h-3 rounded-full transition-all",
+                      showStatusBar ? "right-0.5 bg-black" : "left-0.5 bg-zinc-500"
+                    )} />
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-medium text-zinc-300">Project Details</span>
+                    <span className="text-[9px] text-zinc-600">Header project info</span>
+                  </div>
+                  <button 
+                    onClick={() => setShowHeaderProject(!showHeaderProject)}
+                    className={cn(
+                      "w-8 h-4 rounded-full transition-colors relative",
+                      showHeaderProject ? "bg-white" : "bg-zinc-800"
+                    )}
+                  >
+                    <div className={cn(
+                      "absolute top-0.5 w-3 h-3 rounded-full transition-all",
+                      showHeaderProject ? "right-0.5 bg-black" : "left-0.5 bg-zinc-500"
+                    )} />
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-medium text-zinc-300">Zen Mode</span>
+                    <span className="text-[9px] text-zinc-600">Hide all non-essential UI</span>
+                  </div>
+                  <button 
+                    onClick={() => setZenMode(!zenMode)}
+                    className={cn(
+                      "w-8 h-4 rounded-full transition-colors relative",
+                      zenMode ? "bg-white" : "bg-zinc-800"
+                    )}
+                  >
+                    <div className={cn(
+                      "absolute top-0.5 w-3 h-3 rounded-full transition-all",
+                      zenMode ? "right-0.5 bg-black" : "left-0.5 bg-zinc-500"
+                    )} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-wider">Automation</span>
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col">
                     <span className="text-[11px] font-medium text-zinc-300">Auto-hide Explorer</span>
