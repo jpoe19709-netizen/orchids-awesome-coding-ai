@@ -33,7 +33,9 @@ import {
   Github,
   Maximize2,
   ExternalLink,
-  ChevronDown
+  ChevronDown,
+  Scale,
+  ShieldAlert
 } from "lucide-react";
 import { 
   ResizableHandle, 
