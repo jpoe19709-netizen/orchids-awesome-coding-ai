@@ -72,7 +72,9 @@ export default function AgentPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [autoHideSidebar, setAutoHideSidebar] = useState(false);
+  const [autoHideConsole, setAutoHideConsole] = useState(false);
   const [showEthics, setShowEthics] = useState(true);
+  const [consoleCollapsed, setConsoleCollapsed] = useState(false);
 
   const ETHICS_RULES = [
     { title: "Concise Communication", description: "Minimal text, high density information. Avoid preambles and summaries.", icon: <Zap className="w-3 h-3" /> },
