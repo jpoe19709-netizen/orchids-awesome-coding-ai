@@ -217,6 +217,25 @@ export default function AgentPage() {
                     )} />
                   </button>
                 </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-medium text-zinc-300">Auto-hide Console</span>
+                    <span className="text-[9px] text-zinc-600">Collapse console when building is finished</span>
+                  </div>
+                  <button 
+                    onClick={() => setAutoHideConsole(!autoHideConsole)}
+                    className={cn(
+                      "w-8 h-4 rounded-full transition-colors relative",
+                      autoHideConsole ? "bg-white" : "bg-zinc-800"
+                    )}
+                  >
+                    <div className={cn(
+                      "absolute top-0.5 w-3 h-3 rounded-full transition-all",
+                      autoHideConsole ? "right-0.5 bg-black" : "left-0.5 bg-zinc-500"
+                    )} />
+                  </button>
+                </div>
               </div>
               
               <div className="pt-2 border-t border-zinc-900/50">
