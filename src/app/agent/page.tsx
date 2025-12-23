@@ -84,15 +84,6 @@ export default function AgentPage() {
     { title: "Performance MCP", description: "Optimized Model Context Protocol for low-latency, context-aware reasoning.", icon: <Cpu className="w-3 h-3" /> },
   ];
 
-  const handleSidebarClick = (id: string) => {
-    if (activeSidebar === id && !sidebarCollapsed && autoHideSidebar) {
-      setSidebarCollapsed(true);
-    } else {
-      setActiveSidebar(id);
-      setSidebarCollapsed(false);
-    }
-  };
-
   const handleSend = () => {
     if (!input.trim()) return;
     
@@ -110,9 +101,6 @@ export default function AgentPage() {
       
       setTimeout(() => {
         setIsBuilding(false);
-        if (autoHideConsole) {
-          setConsoleCollapsed(true);
-        }
         setMessages(prev => {
           const last = prev[prev.length - 1];
           return [...prev.slice(0, -1), { ...last, isGenerating: false, content: "Deployment successful. You can now view the changes in the preview panel." }];
@@ -266,7 +254,7 @@ export default function AgentPage() {
         {/* Leftmost Icon Bar */}
         <aside className="w-11 border-r border-zinc-900 bg-[#050505] flex flex-col items-center py-4 gap-4 z-30">
           <div 
-            onClick={() => setActiveSidebar("chat")}
+            onClick={() => handleSidebarClick("chat")}
             className={cn(
               "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
               activeSidebar === "chat" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
@@ -275,7 +263,7 @@ export default function AgentPage() {
             <MessageSquare className="w-4 h-4" />
           </div>
           <div 
-            onClick={() => setActiveSidebar("files")}
+            onClick={() => handleSidebarClick("files")}
             className={cn(
               "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
               activeSidebar === "files" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
@@ -285,7 +273,7 @@ export default function AgentPage() {
           </div>
           {showEthics && (
             <div 
-              onClick={() => setActiveSidebar("ethics")}
+              onClick={() => handleSidebarClick("ethics")}
               className={cn(
                 "w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-colors",
                 activeSidebar === "ethics" ? "bg-white text-black" : "text-zinc-600 hover:bg-zinc-900 hover:text-zinc-400"
@@ -531,37 +519,58 @@ export default function AgentPage() {
                 <ResizableHandle className="h-[1px] bg-zinc-900 hover:bg-zinc-700 transition-colors" />
 
                 {/* Console Panel */}
-                <ResizablePanel defaultSize={30} className="bg-[#050505]">
+                <ResizablePanel 
+                  defaultSize={30} 
+                  minSize={5}
+                  collapsible={true}
+                  onCollapse={() => setConsoleCollapsed(true)}
+                  onExpand={() => setConsoleCollapsed(false)}
+                  className={cn(
+                    "bg-[#050505] transition-all duration-300",
+                    consoleCollapsed ? "max-h-8" : "flex-1"
+                  )}
+                >
                   <div className="flex flex-col h-full">
-                    <div className="h-8 px-3 flex items-center gap-4 border-b border-zinc-900 bg-[#080808]">
-                      <div className="flex items-center gap-1.5">
-                        <Terminal className="w-3 h-3 text-zinc-600" />
-                        <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-[0.2em]">Console</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 ml-4">
-                        <Activity className="w-3 h-3 text-emerald-600" />
-                        <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Process Running</span>
-                      </div>
-                    </div>
-                    <div className="flex-1 p-3 font-mono text-[10px] text-zinc-600 overflow-auto">
-                      <div className="space-y-1">
-                        <div className="flex gap-2">
-                          <span className="text-zinc-800">orchids@cloud:</span>
-                          <span className="text-emerald-900/50 italic">~ (next dev)</span>
+                    <div 
+                      onClick={() => setConsoleCollapsed(!consoleCollapsed)}
+                      className="h-8 px-3 flex items-center justify-between border-b border-zinc-900 bg-[#080808] cursor-pointer hover:bg-[#0a0a0a] transition-colors group"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1.5">
+                          <Terminal className="w-3 h-3 text-zinc-600" />
+                          <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-[0.2em]">Console</span>
                         </div>
-                        <div className="text-zinc-700">✓ Ready in 2.1s</div>
-                        <div className="text-zinc-700">○ Compiling /page...</div>
-                        {isBuilding && (
-                           <motion.div 
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="text-blue-900/50 italic"
-                           >
-                            &gt; Updating server components...
-                           </motion.div>
-                        )}
+                        <div className="flex items-center gap-1.5 ml-4">
+                          <Activity className="w-3 h-3 text-emerald-600" />
+                          <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Process Running</span>
+                        </div>
                       </div>
+                      <ChevronRight className={cn(
+                        "w-3 h-3 text-zinc-700 transition-transform group-hover:text-zinc-500",
+                        consoleCollapsed ? "rotate-0" : "-rotate-90"
+                      )} />
                     </div>
+                    {!consoleCollapsed && (
+                      <div className="flex-1 p-3 font-mono text-[10px] text-zinc-600 overflow-auto">
+                        <div className="space-y-1">
+                          <div className="flex gap-2">
+                            <span className="text-zinc-800">orchids@cloud:</span>
+                            <span className="text-emerald-900/50 italic">~ (next dev)</span>
+                          </div>
+                          <div className="text-zinc-700">✓ Ready in 2.1s</div>
+                          <div className="text-zinc-700">○ Compiling /page...</div>
+                          {isBuilding && (
+                             <motion.div 
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="text-blue-900/50 italic"
+                             >
+                              &gt; Updating server components...
+                             </motion.div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </ResizablePanel>
               </ResizablePanelGroup>
