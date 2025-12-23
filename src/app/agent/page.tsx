@@ -193,21 +193,46 @@ export default function AgentPage() {
               <ResizablePanel defaultSize={15} minSize={12} maxSize={20} className="border-r border-zinc-900 bg-[#050505]">
                 <div className="flex flex-col h-full">
                   <div className="h-9 px-3 flex items-center justify-between border-b border-zinc-900/50">
-                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.1em]">Files</span>
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.1em]">
+                      {activeSidebar === "files" ? "Files" : activeSidebar === "ethics" ? "Ethics MCP" : "Explorer"}
+                    </span>
                     <Plus className="w-3 h-3 text-zinc-600 hover:text-zinc-400 cursor-pointer" />
                   </div>
                   <div className="flex-1 overflow-auto p-2">
-                    <div className="space-y-0.5">
-                      {MOCK_FILES.map(file => (
-                        <div 
-                          key={file.name} 
-                          className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-zinc-900 group cursor-pointer transition-colors"
-                        >
-                          {file.icon}
-                          <span className="text-[12px] text-zinc-500 group-hover:text-zinc-300 truncate font-medium">{file.name}</span>
-                        </div>
-                      ))}
-                    </div>
+                    {activeSidebar === "files" ? (
+                      <div className="space-y-0.5">
+                        {MOCK_FILES.map(file => (
+                          <div 
+                            key={file.name} 
+                            className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-zinc-900 group cursor-pointer transition-colors"
+                          >
+                            {file.icon}
+                            <span className="text-[12px] text-zinc-500 group-hover:text-zinc-300 truncate font-medium">{file.name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : activeSidebar === "ethics" ? (
+                      <div className="space-y-4 p-2">
+                        {ETHICS_RULES.map((rule, i) => (
+                          <div key={i} className="space-y-1.5">
+                            <div className="flex items-center gap-2">
+                              <div className="p-1 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">
+                                {rule.icon}
+                              </div>
+                              <span className="text-[11px] font-bold text-zinc-300 uppercase tracking-tight">{rule.title}</span>
+                            </div>
+                            <p className="text-[10px] text-zinc-600 leading-relaxed pl-7">
+                              {rule.description}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="h-full flex flex-col items-center justify-center text-center p-4">
+                        <Bot className="w-8 h-8 text-zinc-800 mb-2" />
+                        <span className="text-[10px] text-zinc-600 font-medium italic">Active Context: {activeSidebar}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </ResizablePanel>
