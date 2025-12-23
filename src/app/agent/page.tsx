@@ -152,6 +152,82 @@ export default function AgentPage() {
         </div>
       </header>
 
+      {/* Settings Overlay */}
+      <AnimatePresence>
+        {isSettingsOpen && (
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            className="absolute top-12 right-4 w-72 bg-[#0a0a0a] border border-zinc-900 rounded-xl shadow-2xl z-50 overflow-hidden"
+          >
+            <div className="p-4 border-b border-zinc-900 flex items-center justify-between">
+              <span className="text-xs font-bold text-white uppercase tracking-widest">Settings</span>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setIsSettingsOpen(false)}
+                className="h-6 w-6 text-zinc-500 hover:text-white"
+              >
+                <Plus className="w-4 h-4 rotate-45" />
+              </Button>
+            </div>
+            <div className="p-4 space-y-6">
+              <div className="space-y-3">
+                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-wider">Features</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-medium text-zinc-300">Ethics MCP</span>
+                    <span className="text-[9px] text-zinc-600 text-pretty">Show/hide Orchids working principles in sidebar</span>
+                  </div>
+                  <button 
+                    onClick={() => setShowEthics(!showEthics)}
+                    className={cn(
+                      "w-8 h-4 rounded-full transition-colors relative",
+                      showEthics ? "bg-white" : "bg-zinc-800"
+                    )}
+                  >
+                    <div className={cn(
+                      "absolute top-0.5 w-3 h-3 rounded-full transition-all",
+                      showEthics ? "right-0.5 bg-black" : "left-0.5 bg-zinc-500"
+                    )} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-wider">Interface</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-medium text-zinc-300">Auto-hide Explorer</span>
+                    <span className="text-[9px] text-zinc-600">Automatically collapse sidebar on small viewports</span>
+                  </div>
+                  <button 
+                    onClick={() => setAutoHideSidebar(!autoHideSidebar)}
+                    className={cn(
+                      "w-8 h-4 rounded-full transition-colors relative",
+                      autoHideSidebar ? "bg-white" : "bg-zinc-800"
+                    )}
+                  >
+                    <div className={cn(
+                      "absolute top-0.5 w-3 h-3 rounded-full transition-all",
+                      autoHideSidebar ? "right-0.5 bg-black" : "left-0.5 bg-zinc-500"
+                    )} />
+                  </button>
+                </div>
+              </div>
+              
+              <div className="pt-2 border-t border-zinc-900/50">
+                <div className="flex items-center gap-2 text-zinc-500 hover:text-zinc-300 cursor-pointer group">
+                  <ShieldAlert className="w-3.5 h-3.5" />
+                  <span className="text-[11px] font-medium">Reset to defaults</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Main content area */}
       <div className="flex-1 flex overflow-hidden">
         {/* Leftmost Icon Bar */}
