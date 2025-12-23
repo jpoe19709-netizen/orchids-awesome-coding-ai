@@ -118,6 +118,14 @@ const TOOLS = [
     url: "https://bolt.new",
     tags: ["Browser-based", "Fast"],
     icon: <Zap className="text-yellow-400" />
+  },
+  {
+    name: "Dyad",
+    description: "The free, local, open-source AI app builder. A modern alternative to v0, Lovable, and Bolt.",
+    category: "builder",
+    url: "/agent",
+    tags: ["Local", "Open Source", "Free"],
+    icon: <Sparkles className="text-blue-400" />
   }
 ];
 
