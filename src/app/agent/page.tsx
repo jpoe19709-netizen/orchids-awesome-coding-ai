@@ -134,7 +134,15 @@ export default function AgentPage() {
             <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-600 hover:text-white hover:bg-zinc-900">
               <Github className="w-3.5 h-3.5" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-600 hover:text-white hover:bg-zinc-900">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+              className={cn(
+                "h-7 w-7 transition-colors",
+                isSettingsOpen ? "text-white bg-zinc-900" : "text-zinc-600 hover:text-white hover:bg-zinc-900"
+              )}
+            >
               <Settings className="w-3.5 h-3.5" />
             </Button>
           </div>
